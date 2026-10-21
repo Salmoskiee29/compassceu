@@ -2,25 +2,90 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;
+  --surface: #f6f8fb;
+  --muted: #5b6474;
+  --line: #e3e7ee;
+  --brand: #1d4ed8;
+  --brand-dark: #1e3a8a;
+  --brand-soft: #e6edff;
+  --accent: #f59e0b;
+  --navy: #0b1a4a;
+  --navy-solid: #0b1a4a;
+  --navy-solid-hover: #16296b;
+  --gold: #a8741f;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--accent);
+  --color-navy: var(--navy);
+  --color-navy-solid: var(--navy-solid);
+  --color-navy-solid-hover: var(--navy-solid-hover);
+  --color-gold: var(--gold);
+  --font-display: var(--font-montserrat);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0b1120;
+    --foreground: #e5e9f0;
+    --surface: #111a2e;
+    --muted: #94a0b4;
+    --line: #1f2a40;
+    --brand: #6b93ff;
+    --brand-dark: #4f7bf5;
+    --brand-soft: #172447;
+    --accent: #fbbf24;
+    --navy: #dbe4ff;
+    --navy-solid: #2a4bd1;
+    --navy-solid-hover: #3a5be0;
+    --gold: #e0b25a;
   }
+}
+
+/* Forces the light palette inside an element (used by the home hero/header,
+   whose photo and logo are designed for a light background). */
+.theme-light {
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --surface: #f6f8fb;
+  --muted: #5b6474;
+  --line: #e3e7ee;
+  --brand: #1d4ed8;
+  --brand-dark: #1e3a8a;
+  --brand-soft: #e6edff;
+  --navy: #0b1a4a;
+  --navy-solid: #0b1a4a;
+  --navy-solid-hover: #16296b;
+  --gold: #a8741f;
+  color: var(--foreground);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--line);
+  background: var(--background);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+  outline: none;
+}
+.input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-soft);
 }
