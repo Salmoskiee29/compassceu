@@ -39,9 +39,9 @@ export default function AboutPage() {
           <div>
             <h2 className="text-2xl font-bold">Who we serve</h2>
             <p className="mt-4 text-muted">
-              Nurses, pharmacists, teachers, psychologists, and business
-              professionals — plus the hospitals, schools, and organizations
-              that support their growth.
+              Registered nurses (RN), licensed vocational nurses (LVN), certified
+              nursing assistants (CNA), and home health aides (HHA) — plus the
+              hospitals, care facilities, and agencies that support their growth.
             </p>
           </div>
         </div>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { categories } from "@/lib/courses";
+import { categories, categoryNames } from "@/lib/courses";
 
 type NavItem = { label: string; items: { href: string; label: string }[] };
 
@@ -18,7 +18,7 @@ const nav: NavItem[] = [
   },
   {
     label: "For Professionals",
-    items: categories.map((c) => ({ href: `/courses?category=${c}`, label: c })),
+    items: categories.map((c) => ({ href: `/courses?category=${c}`, label: `${categoryNames[c]} (${c})` })),
   },
   {
     label: "About",

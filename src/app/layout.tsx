@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s | CompassCEU",
   },
   description:
-    "Accredited continuing education units (CEUs) for nurses, pharmacists, teachers, psychologists, and business professionals.",
+    "Continuing education for California RNs, LVNs, CNAs, and home health aides (HHA).",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

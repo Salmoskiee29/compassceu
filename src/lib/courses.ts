@@ -1,9 +1,4 @@
-export type Category =
-  | "Nursing"
-  | "Pharmacy"
-  | "Education"
-  | "Psychology"
-  | "Business";
+export type Category = "RN" | "LVN" | "CNA" | "HHA";
 
 export type Course = {
   slug: string;
@@ -19,20 +14,21 @@ export type Course = {
   modules: string[];
 };
 
-export const categories: Category[] = [
-  "Nursing",
-  "Pharmacy",
-  "Education",
-  "Psychology",
-  "Business",
-];
+export const categories: Category[] = ["RN", "LVN", "CNA", "HHA"];
+
+export const categoryNames: Record<Category, string> = {
+  RN: "Registered Nurses",
+  LVN: "Licensed Vocational Nurses",
+  CNA: "Certified Nursing Assistants",
+  HHA: "Home Health Aides",
+};
 
 // Sample catalog — replace with real course data or a CMS/database later.
 export const courses: Course[] = [
   {
     slug: "infection-control-essentials",
     title: "Infection Control Essentials",
-    category: "Nursing",
+    category: "CNA",
     units: 3,
     hours: 6,
     level: "Beginner",
@@ -55,7 +51,7 @@ export const courses: Course[] = [
   {
     slug: "clinical-pharmacology-update",
     title: "Clinical Pharmacology Update",
-    category: "Pharmacy",
+    category: "LVN",
     units: 4,
     hours: 8,
     level: "Intermediate",
@@ -76,32 +72,32 @@ export const courses: Course[] = [
     ],
   },
   {
-    slug: "differentiated-instruction",
-    title: "Differentiated Instruction in Practice",
-    category: "Education",
+    slug: "dementia-care-at-home",
+    title: "Dementia Care at Home",
+    category: "HHA",
     units: 3,
     hours: 6,
     level: "Beginner",
     price: 1200,
     instructor: "Course Instructor",
     summary:
-      "Practical strategies to design lessons that meet diverse learner needs in one classroom.",
+      "Practical approaches to supporting clients living with dementia safely and respectfully at home.",
     outcomes: [
-      "Assess learner readiness and interests",
-      "Design tiered activities and assessments",
-      "Manage a flexible-grouping classroom",
+      "Recognize the stages and common behaviors of dementia",
+      "Use calm, person-centered communication techniques",
+      "Keep the home environment safe and predictable",
     ],
     modules: [
-      "Principles of differentiation",
-      "Formative assessment",
-      "Tiered lesson design",
-      "Classroom management",
+      "Understanding dementia",
+      "Communication strategies",
+      "Responding to challenging behaviors",
+      "Home safety and daily routines",
     ],
   },
   {
     slug: "trauma-informed-care",
     title: "Trauma-Informed Care",
-    category: "Psychology",
+    category: "RN",
     units: 5,
     hours: 10,
     level: "Intermediate",
@@ -124,7 +120,7 @@ export const courses: Course[] = [
   {
     slug: "ethics-and-professional-practice",
     title: "Ethics and Professional Practice",
-    category: "Business",
+    category: "LVN",
     units: 2,
     hours: 4,
     level: "Beginner",
@@ -147,7 +143,7 @@ export const courses: Course[] = [
   {
     slug: "advanced-wound-management",
     title: "Advanced Wound Management",
-    category: "Nursing",
+    category: "RN",
     units: 6,
     hours: 12,
     level: "Advanced",

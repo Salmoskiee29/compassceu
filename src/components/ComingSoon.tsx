@@ -1,6 +1,7 @@
 import Image from "next/image";
+import { categories, categoryNames } from "@/lib/courses";
 
-const audiences = ["Nurses (RN, LVN)", "Pharmacists", "Therapists", "Counselors"];
+const audiences = categories.map((c) => `${categoryNames[c]} (${c})`);
 
 export function ComingSoon() {
   return (

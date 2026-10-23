@@ -10,12 +10,10 @@ const features = [
 ] as const;
 
 const professions = [
-  { icon: "stethoscope", label: "Nurses", sub: "(RN, LVN)", href: "/courses?category=Nursing" },
-  { icon: "doctor", label: "Physicians", sub: "(MD, DO)", href: "/courses" },
-  { icon: "pill", label: "Pharmacists", sub: "", href: "/courses?category=Pharmacy" },
-  { icon: "tooth", label: "Therapists", sub: "(PT, OT, SLP)", href: "/courses" },
-  { icon: "person", label: "Counselors", sub: "(LCSW, LMFT)", href: "/courses?category=Psychology" },
-  { icon: "dots", label: "and More", sub: "", href: "/courses" },
+  { icon: "stethoscope", label: "Registered Nurses", sub: "(RN)", href: "/courses?category=RN" },
+  { icon: "pill", label: "Vocational Nurses", sub: "(LVN)", href: "/courses?category=LVN" },
+  { icon: "person", label: "Nursing Assistants", sub: "(CNA)", href: "/courses?category=CNA" },
+  { icon: "home", label: "Home Health Aides", sub: "(HHA)", href: "/courses?category=HHA" },
 ] as const;
 
 export function Hero() {
@@ -146,7 +144,7 @@ export function Hero() {
           <p className="text-center text-[17px] font-medium text-[#1a2f6e] lg:text-[clamp(0.95rem,1.1vw,1.15rem)]">
             Trusted by Healthcare Professionals Across California
           </p>
-          <ul className="mt-4 grid grid-cols-3 rounded-2xl bg-white py-3 shadow-sm sm:grid-cols-6 sm:divide-x sm:divide-line">
+          <ul className="mt-4 grid grid-cols-2 rounded-2xl bg-white py-3 shadow-sm sm:grid-cols-4 sm:divide-x sm:divide-line">
             {professions.map((p) => (
               <li key={p.label}>
                 <Link
@@ -192,11 +190,9 @@ type IconName =
   | "laptop"
   | "ribbon"
   | "stethoscope"
-  | "doctor"
   | "pill"
-  | "tooth"
   | "person"
-  | "dots";
+  | "home";
 
 const paths: Record<IconName, React.ReactNode> = {
   book: (
@@ -234,24 +230,12 @@ const paths: Record<IconName, React.ReactNode> = {
       <circle cx="19.5" cy="10.5" r="2.5" />
     </>
   ),
-  doctor: (
-    <>
-      <circle cx="12" cy="7" r="4" />
-      <path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2z" />
-      <path d="M10 13l2 3 2-3M12 16v3" />
-    </>
-  ),
   pill: (
     <>
       <rect x="2" y="8.5" width="13" height="7" rx="3.5" transform="rotate(-45 8.5 12)" />
       <path d="m6 9.5 5 5" />
       <circle cx="16.5" cy="16.5" r="5" />
       <path d="m13 20 7-7" />
-    </>
-  ),
-  tooth: (
-    <>
-      <path d="M7 3c-2.5 0-4 2-4 4.5 0 3 1.5 4.5 2 7 .5 3 1 6.5 2.5 6.5S9.5 17 10 15.5c.5-1.5 1-2 2-2s1.5.5 2 2 1 5.5 2.5 5.5S18.5 17.5 19 14.5c.5-2.5 2-4 2-7C21 5 19.5 3 17 3c-2 0-3 1-5 1S9 3 7 3z" />
     </>
   ),
   person: (
@@ -261,11 +245,11 @@ const paths: Record<IconName, React.ReactNode> = {
       <path d="M8.5 21v-3M15.5 21v-3" />
     </>
   ),
-  dots: (
+  home: (
     <>
-      <circle cx="5" cy="12" r="1.8" fill="currentColor" />
-      <circle cx="12" cy="12" r="1.8" fill="currentColor" />
-      <circle cx="19" cy="12" r="1.8" fill="currentColor" />
+      <path d="M3 10.5 12 3l9 7.5" />
+      <path d="M5 9v12h14V9" />
+      <path d="M12 12.5v5M9.5 15h5" />
     </>
   ),
 };
