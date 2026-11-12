@@ -1,0 +1,3 @@
+[build.environment]
+  # Full site on (Coming Soon mode off). See src/lib/site.ts.
+  COMING_SOON = "false"
