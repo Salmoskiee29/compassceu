@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { signOut } from "@/app/actions/auth";
 import { categories, categoryNames } from "@/lib/courses";
 
 type NavItem = { label: string; items: { href: string; label: string }[] };
@@ -36,10 +37,20 @@ const nav: NavItem[] = [
   },
 ];
 
-export function Header() {
+export type HeaderAccount = { name: string } | null;
+
+export function Header({ account, cartCount }: { account: HeaderAccount; cartCount: number }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isHome = pathname === "/";
+  const initials = account
+    ? account.name
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((p) => p[0]?.toUpperCase())
+        .join("") || "Me"
+    : "";
 
   return (
     <header
@@ -96,32 +107,74 @@ export function Header() {
               <path d="m20 20-4-4" />
             </svg>
           </Link>
+          <CartLink count={cartCount} />
           <span className="h-8 w-px bg-line" aria-hidden="true" />
-          <Link
-            href="/sign-in"
-            className="rounded-full border-[1.5px] border-navy px-7 py-3 text-[15px] font-medium text-navy transition hover:bg-navy/5"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/create-account"
-            className="rounded-lg bg-navy-solid px-8 py-3.5 text-[15px] font-semibold text-white shadow-lg shadow-navy-solid/20 transition hover:bg-navy-solid-hover"
-          >
-            Create Account
-          </Link>
+          {account ? (
+            <>
+              <Link
+                href="/dashboard"
+                className="rounded-lg bg-navy-solid px-7 py-3 text-[15px] font-semibold text-white shadow-lg shadow-navy-solid/20 transition hover:bg-navy-solid-hover"
+              >
+                My Courses
+              </Link>
+              <div className="group relative">
+                <button
+                  type="button"
+                  aria-label="Account menu"
+                  className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-soft text-sm font-bold text-brand"
+                >
+                  {initials}
+                </button>
+                <div className="invisible absolute right-0 top-full z-50 min-w-52 pt-2 opacity-0 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                  <div className="rounded-xl border border-line bg-background p-2 shadow-xl">
+                    <p className="truncate px-3 py-2 text-xs text-muted">{account.name}</p>
+                    <Link href="/dashboard" className="block rounded-lg px-3 py-2 text-sm hover:bg-surface hover:text-brand">
+                      My Courses
+                    </Link>
+                    <Link href="/account" className="block rounded-lg px-3 py-2 text-sm hover:bg-surface hover:text-brand">
+                      Account
+                    </Link>
+                    <form action={signOut}>
+                      <button type="submit" className="block w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-surface hover:text-brand">
+                        Sign out
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/sign-in"
+                className="rounded-full border-[1.5px] border-navy px-7 py-3 text-[15px] font-medium text-navy transition hover:bg-navy/5"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/create-account"
+                className="rounded-lg bg-navy-solid px-8 py-3.5 text-[15px] font-semibold text-white shadow-lg shadow-navy-solid/20 transition hover:bg-navy-solid-hover"
+              >
+                Create Account
+              </Link>
+            </>
+          )}
         </div>
 
+        <div className="flex items-center gap-1 lg:hidden">
+        <CartLink count={cartCount} />
         <button
           type="button"
           aria-label="Toggle menu"
           aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
-          className="rounded-md p-2 text-navy lg:hidden"
+          className="rounded-md p-2 text-navy"
         >
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
           </svg>
         </button>
+        </div>
       </div>
 
       {open && (
@@ -141,14 +194,30 @@ export function Header() {
               ))}
             </div>
           ))}
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            <Link href="/sign-in" onClick={() => setOpen(false)} className="rounded-full border-[1.5px] border-navy py-2.5 text-center font-medium text-navy">
-              Sign In
-            </Link>
-            <Link href="/create-account" onClick={() => setOpen(false)} className="rounded-lg bg-navy-solid py-2.5 text-center font-semibold text-white">
-              Create Account
-            </Link>
-          </div>
+          {account ? (
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <Link href="/dashboard" onClick={() => setOpen(false)} className="rounded-lg bg-navy-solid py-2.5 text-center font-semibold text-white">
+                My Courses
+              </Link>
+              <Link href="/account" onClick={() => setOpen(false)} className="rounded-full border-[1.5px] border-navy py-2.5 text-center font-medium text-navy">
+                Account
+              </Link>
+              <form action={signOut} className="col-span-2">
+                <button type="submit" className="w-full rounded-md py-2 text-sm text-muted">
+                  Sign out
+                </button>
+              </form>
+            </div>
+          ) : (
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <Link href="/sign-in" onClick={() => setOpen(false)} className="rounded-full border-[1.5px] border-navy py-2.5 text-center font-medium text-navy">
+                Sign In
+              </Link>
+              <Link href="/create-account" onClick={() => setOpen(false)} className="rounded-lg bg-navy-solid py-2.5 text-center font-semibold text-white">
+                Create Account
+              </Link>
+            </div>
+          )}
         </nav>
       )}
     </header>
@@ -160,5 +229,22 @@ function ChevronDown() {
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
       <path d="m6 9 6 6 6-6" />
     </svg>
+  );
+}
+
+function CartLink({ count }: { count: number }) {
+  return (
+    <Link href="/cart" aria-label={`Cart, ${count} item${count === 1 ? "" : "s"}`} className="relative p-2 text-navy hover:text-brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2" />
+        <circle cx="10" cy="20" r="1.3" />
+        <circle cx="17" cy="20" r="1.3" />
+      </svg>
+      {count > 0 && (
+        <span className="absolute -top-0.5 -right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#c9973f] px-1 font-sans text-[11px] font-bold text-white">
+          {count}
+        </span>
+      )}
+    </Link>
   );
 }

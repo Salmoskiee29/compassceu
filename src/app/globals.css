@@ -89,3 +89,21 @@ body {
   border-color: var(--brand);
   box-shadow: 0 0 0 3px var(--brand-soft);
 }
+
+/* Printing a certificate: hide site chrome and anything marked .no-print. */
+@media print {
+  body > header,
+  body > footer,
+  .site-header,
+  .site-footer,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  @page {
+    size: landscape;
+    margin: 12mm;
+  }
+}

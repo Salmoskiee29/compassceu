@@ -1,15 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Result =
   | { valid: true; id: string; holder: string; course: string; units?: number; issuedOn: string }
   | { valid: false };
 
-export function VerifyForm() {
-  const [id, setId] = useState("");
+export function VerifyForm({ initialId = "" }: { initialId?: string }) {
+  const [id, setId] = useState(initialId);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
+
+  // Arriving from the home page form (/verify?id=…) checks the ID right away.
+  useEffect(() => {
+    if (!initialId.trim()) return;
+    let cancelled = false;
+    fetch(`/api/verify?id=${encodeURIComponent(initialId)}`)
+      .then((res) => res.json())
+      .catch(() => ({ valid: false }))
+      .then((json: Result) => {
+        if (!cancelled) setResult(json);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [initialId]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -31,8 +46,8 @@ export function VerifyForm() {
         <input
           value={id}
           onChange={(e) => setId(e.target.value)}
-          placeholder="e.g. CCEU-2026-0001"
-          className="input flex-1"
+          placeholder="e.g. CCEU-2026-7K4QPZ"
+          className="input flex-1 font-mono uppercase"
           aria-label="Certificate ID"
         />
         <button
@@ -55,7 +70,7 @@ export function VerifyForm() {
               <div>
                 <dt className="text-muted">Issued</dt>
                 <dd className="font-medium">
-                  {new Date(result.issuedOn).toLocaleDateString("en-PH", { dateStyle: "long" })}
+                  {new Date(result.issuedOn).toLocaleDateString("en-US", { dateStyle: "long" })}
                   {result.units ? ` · ${result.units} CEUs` : ""}
                 </dd>
               </div>

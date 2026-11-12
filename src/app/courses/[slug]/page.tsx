@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { EnrollForm } from "@/components/EnrollForm";
 import { CourseCard } from "@/components/CourseCard";
+import { CourseEnrollCta } from "@/components/CourseEnrollCta";
 import { courses, formatPrice, getCourse } from "@/lib/courses";
-
-export function generateStaticParams() {
-  return courses.map((c) => ({ slug: c.slug }));
-}
 
 export async function generateMetadata(
   props: PageProps<"/courses/[slug]">,
@@ -80,6 +76,12 @@ export default async function CoursePage(props: PageProps<"/courses/[slug]">) {
                   {m}
                 </li>
               ))}
+              <li className="flex items-center gap-4 p-4 text-sm">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold/15 text-xs font-semibold text-gold">
+                  ★
+                </span>
+                Final assessment &amp; certificate
+              </li>
             </ol>
           </section>
         </div>
@@ -91,7 +93,7 @@ export default async function CoursePage(props: PageProps<"/courses/[slug]">) {
               {course.units} CEUs · certificate included
             </p>
             <div className="mt-6">
-              <EnrollForm courseSlug={course.slug} courseTitle={course.title} />
+              <CourseEnrollCta course={course} />
             </div>
           </div>
         </aside>

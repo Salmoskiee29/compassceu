@@ -22,10 +22,11 @@ export function CourseBrowser({
     const q = query.trim().toLowerCase();
     const filtered = courses.filter(
       (c) =>
-        (category === "All" || c.category === category) &&
+        (category === "All" || c.category === category || c.alsoFor?.includes(category)) &&
         (level === "All" || c.level === level) &&
         (!q ||
           c.title.toLowerCase().includes(q) ||
+          c.topic.toLowerCase().includes(q) ||
           c.summary.toLowerCase().includes(q)),
     );
     return [...filtered].sort((a, b) => {

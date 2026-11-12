@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CompassCEU
 
-## Getting Started
+Continuing-education platform for California RNs, LVNs, CNAs and HHAs.
+Next.js 16 (App Router) · Tailwind 4 · Supabase (Auth + Postgres).
 
-First, run the development server:
+## What works (learner side)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+| Flow | Route |
+| --- | --- |
+| Create account / sign in / sign out | `/create-account`, `/sign-in` |
+| Course catalog & detail | `/courses`, `/courses/[slug]` |
+| **Mock checkout** (test mode, no charge) | `/checkout/[slug]` |
+| My Courses dashboard (progress, CEUs, certificates) | `/dashboard` |
+| Lesson player with saved progress | `/learn/[slug]`, `/learn/[slug]/[lesson]` |
+| Final assessment (graded on the server, 70% to pass, unlimited retakes) | `/learn/[slug]/quiz` |
+| Certificate — auto-issued on pass, printable / Save as PDF | `/certificates/[id]` |
+| Public certificate verification | `/verify` |
+| Profile (name + CA license no. shown on certificates) | `/account` |
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Learner-only pages redirect to `/sign-in` and come back afterwards.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Run it locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Install**
+   ```bash
+   npm install
+   ```
+2. **Create a Supabase project** (free) at https://supabase.com/dashboard.
+3. **Create the tables:** Supabase → SQL Editor → New query → paste `supabase/schema.sql` → **Run**.
+4. **Env vars:** open `.env.local` and paste your keys from
+   Supabase → Project Settings → **API Keys** (Project URL, publishable key, secret key).
+5. **Auth settings** (Supabase → Authentication):
+   - *URL Configuration* → Site URL `http://localhost:3000`, and add `http://localhost:3000/auth/callback` to Redirect URLs.
+   - Optional for faster testing: *Sign In / Providers → Email* → turn off **Confirm email** so new accounts sign in immediately.
+6. **Start**
+   ```bash
+   npm run dev
+   ```
+   Open http://localhost:3000. `COMING_SOON=false` shows the full site; remove it (or set `true`) to go back to the Coming Soon page.
 
-## Learn More
+### Quick test
+Create account → open any course → **Enroll now** → *Complete test payment* → finish the 4 lessons → pass the assessment → **View certificate** → copy the ID into `/verify`.
 
-To learn more about Next.js, take a look at the following resources:
+## Where things live
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `src/lib/courses.ts` — catalog (titles, CEUs, USD prices — placeholders)
+- `src/lib/content.ts` — lesson text + quiz questions/answers (**sample content**, server-only)
+- `src/app/actions/` — Server Actions: auth, checkout, lesson progress, quiz grading, certificate issuing
+- `src/lib/supabase/` — Supabase clients (user-scoped, admin/secret, proxy session refresh)
+- `src/proxy.ts` — Coming Soon gate + session refresh + learner-page guard
+- `supabase/schema.sql` — tables, Row Level Security, signup trigger, `verify_certificate()`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Security notes
+- Learners can only **read** their own rows (RLS). Enrollments, progress, quiz attempts and certificates are
+  **written only by the server** with the secret key, so nobody can enroll for free or fake a certificate from the browser.
+- Quiz answers never reach the browser; grading happens in `submitQuiz`.
+- The public verify endpoint only exposes ID, holder name, course, CEUs and date.
 
-## Deploy on Vercel
+## Before launch (not done yet)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] Real payments — replace `completeTestCheckout` in `src/app/actions/learning.ts` (Stripe Checkout + webhook)
+- [ ] Real course content & quizzes from the client team (and BRN provider number in `src/lib/site.ts`)
+- [ ] Confirm prices (USD) and whether certificates should say CEUs or contact hours
+- [ ] Admin side (manage courses, learners, certificates, refunds)
+- [ ] Transactional emails (enrollment receipt, certificate issued)

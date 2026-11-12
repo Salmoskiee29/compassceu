@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     q: "What payment methods do you accept?",
-    a: "We accept major credit and debit cards, GCash, Maya, and bank transfer. Group rates are available for institutions.",
+    a: "We accept major credit and debit cards. Group rates are available for hospitals, agencies, and schools.",
   },
 ];
 

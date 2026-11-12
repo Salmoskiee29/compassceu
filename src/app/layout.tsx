@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { getProfile } from "@/lib/auth";
+import { readCart } from "@/lib/cart";
 import { comingSoon } from "@/lib/site";
 import "./globals.css";
 
@@ -30,7 +32,11 @@ export const metadata: Metadata = {
     "Continuing education for California RNs, LVNs, CNAs, and home health aides (HHA).",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const profile = comingSoon ? null : await getProfile();
+  const account = profile ? { name: profile.full_name || profile.email } : null;
+  const cartCount = comingSoon ? 0 : (await readCart()).length;
+
   return (
     <html
       lang="en"
@@ -41,7 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <main className="flex-1">{children}</main>
         ) : (
           <>
-            <Header />
+            <Header account={account} cartCount={cartCount} />
             <main className="flex-1">{children}</main>
             <Footer />
           </>
